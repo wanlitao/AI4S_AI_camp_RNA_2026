@@ -11,6 +11,10 @@ set -e
 # ===================== 配置区 =====================
 # 模型名称（必须用 v0.5.0 后缀！v1.0.0 会报 not supported）
 MODEL_NAME="protenix_base_default_v0.5.0"
+SPECIAL_JSON_NAME="3"
+SPECIAL_MODEL_NAME="protenix_mini_default_v0.5.0"
+SPECIAL_SAMPLE_NUM="1"
+SPECIAL_USE_DEFAULT_PARAMS="true"
 # 赛题JSON所在目录（相对于脚本位置）
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 JSON_DIR="${SCRIPT_DIR}/competition_datas"
@@ -86,6 +90,7 @@ if protenix predict --help &> /dev/null 2>&1; then
     FLAG_MODEL="--model_name"
     FLAG_MSA="--use_msa"
     FLAG_SAMPLE="--sample"
+    FLAG_DEFAULT_PARAMS="--use_default_params"
     echo "  CLI 格式: 新版 (protenix predict --input ...)"
 else
     CLI_CMD="pred"
@@ -94,6 +99,7 @@ else
     FLAG_MODEL="-n"
     FLAG_MSA=""
     FLAG_SAMPLE="-s"
+    FLAG_DEFAULT_PARAMS=""
     echo "  CLI 格式: 旧版 (protenix pred -i ...)"
 fi
 echo "  protenix CLI 验证通过 ✓"
@@ -130,6 +136,15 @@ for json_file in "${JSON_DIR}"/*.json; do
 
     basename_noext=$(basename "$json_file" .json)
     OUT_DIR="${OUTPUT_BASE}/${basename_noext}"
+    CURRENT_MODEL_NAME="${MODEL_NAME}"
+    CURRENT_SAMPLE_NUM="${SAMPLE_NUM}"
+    CURRENT_USE_DEFAULT_PARAMS=""
+
+    if [ "${basename_noext}" = "${SPECIAL_JSON_NAME}" ]; then
+        CURRENT_MODEL_NAME="${SPECIAL_MODEL_NAME}"
+        CURRENT_SAMPLE_NUM="${SPECIAL_SAMPLE_NUM}"
+        CURRENT_USE_DEFAULT_PARAMS="${SPECIAL_USE_DEFAULT_PARAMS}"
+    fi
 
     echo ""
     echo "  ──────────────────────────────────"
@@ -138,14 +153,17 @@ for json_file in "${JSON_DIR}"/*.json; do
     echo "  ──────────────────────────────────"
 
     # 构建推理命令（自动适配新旧版本CLI）
-    CMD="protenix ${CLI_CMD} ${FLAG_INPUT} ${json_file} ${FLAG_OUTDIR} ${OUT_DIR} ${FLAG_MODEL} ${MODEL_NAME}"
+    CMD="protenix ${CLI_CMD} ${FLAG_INPUT} ${json_file} ${FLAG_OUTDIR} ${OUT_DIR} ${FLAG_MODEL} ${CURRENT_MODEL_NAME}"
     # MSA 标志（旧版无此参数）
     if [ -n "${FLAG_MSA}" ]; then
         CMD="${CMD} ${FLAG_MSA} ${USE_MSA}"
     fi
+    if [ -n "${FLAG_DEFAULT_PARAMS}" ] && [ -n "${CURRENT_USE_DEFAULT_PARAMS}" ]; then
+        CMD="${CMD} ${FLAG_DEFAULT_PARAMS} ${CURRENT_USE_DEFAULT_PARAMS}"
+    fi
     # 如果指定了采样数则加上
-    if [ -n "${SAMPLE_NUM}" ]; then
-        CMD="${CMD} ${FLAG_SAMPLE} ${SAMPLE_NUM}"
+    if [ -n "${CURRENT_SAMPLE_NUM}" ]; then
+        CMD="${CMD} ${FLAG_SAMPLE} ${CURRENT_SAMPLE_NUM}"
     fi
 
     echo "  命令: ${CMD}"
