@@ -1,0 +1,19 @@
+[
+    {
+        "name": "r001",
+        "sequences": [
+            {
+                "proteinChain": {
+                    "sequence": "SEREELKALLDEYEQAMKELMKYKNQLLALERGTDLYDPEFAKYLKELLKLTEEYLNKILKKLKELIENSKDPLIQALLSVKGVGPITAAYLYAYVDLTKATSASALWAYLGIDKPSHKRYKKGEAGGGNKKLRTAVWNQARSMIKRRDSPYRKVYLEEKKRLSKSKKVTKSRNTQGELVKVKWSKAKPSHKHGAALRAVMKTFLADVWFVGHKIAGLPTRPLYVGIVDPEKRGFKY",
+                    "count": 2
+                }
+            },
+            {
+                "rnaSequence": {
+                    "sequence": "GCUUUUUUAUCGAAGAUGACUCCAAAGGCAGAAC",
+                    "count": 1
+                }
+            }
+        ]
+    }
+]
