@@ -2,13 +2,14 @@
 
 set -e
 
-MODEL_NAME="protenix_mini_default_v0.5.0"
+MODEL_NAME="protenix_base_default_v0.5.0"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 JSON_DIR="${SCRIPT_DIR}/competition_datas"
 OUTPUT_BASE="${SCRIPT_DIR}/protenix_outputs"
 USE_MSA=false
 SAMPLE_NUM="1"
 TARGET_JSON_NAME="3"
+
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 echo "============================================"
@@ -75,7 +76,7 @@ else
     FLAG_OUTDIR="-o"
     FLAG_MODEL="-n"
     FLAG_MSA=""
-    FLAG_SAMPLE="-s"
+    FLAG_SAMPLE="-e"
     FLAG_DEFAULT_PARAMS=""
     echo "  CLI format: old (protenix pred -i ...)"
 fi

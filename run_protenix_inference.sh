@@ -72,7 +72,7 @@ else
     FLAG_OUTDIR="-o"
     FLAG_MODEL="-n"
     FLAG_MSA=""
-    FLAG_SAMPLE="-s"
+    FLAG_SAMPLE="-e"
     echo "  CLI format: old (protenix pred -i ...)"
 fi
 echo "  protenix CLI is ready"
